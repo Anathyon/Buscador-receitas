@@ -18,8 +18,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm py-5 px-8 flex justify-between items-center relative z-50">
-      {/* Logo com Animação */}
+    <header className="bg-white shadow-sm py-5 w-auto px-8 flex justify-between items-center relative z-50" style={{padding:"2%"}}>
       <Link 
         to="/" 
         className="flex items-center space-x-2 transform hover:scale-105 transition-transform duration-200"
@@ -32,22 +31,23 @@ const Header: React.FC = () => {
         <span className="text-2xl font-bold text-orange-600">RecipeApp</span>
       </Link>
 
-      {/* Navegação e Seletor de Idioma para Desktop */}
-      <div className="hidden md:flex items-center space-x-12">
-        <nav className="flex items-center space-x-6">
+      <div className="hidden md:flex items-center space-x-12 w-28 relative right-44">
+      <nav className="flex items-center space-x-6 w-36 relative" style={{gap:"6%", marginRight:"50%"}}>
           <Link
             to="/"
             className="flex items-center px-6 py-2 rounded-full font-semibold transition-colors duration-200"
             style={{
-              backgroundColor: '#ffedd5', // Cor do bg do botão selecionado
-              color: '#d97706', // Cor do texto do botão selecionado
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)', // Sombra do botão
+              backgroundColor: '#ffedd5',
+              color: '#d97706', 
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+              padding: "8%"
             }}
           >
             <FaHome className="mr-2" />
             Início
           </Link>
           <Link 
+            style={{padding: "8%"}}
             to="/buscar" 
             className="flex items-center px-6 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
           >
@@ -56,14 +56,14 @@ const Header: React.FC = () => {
           </Link>
         </nav>
         
-        {/* Seletor de Idioma - Desktop */}
-        <div className="relative">
+        <div className="relative" style={{}}>
           <button
             onClick={toggleLanguageSelector}
-            className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="flex w-24 items-center justify-around space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            style={{padding: '8%'}}
           >
-            <FaGlobeAmericas className="text-gray-600" />
-            <ReactCountryFlag countryCode={currentLanguage} svg style={{ width: '1.5em', height: '1.2em' }} />
+            <FaGlobeAmericas className="text-gray-600" style={{ width: '1.5em', height: '1.5em' }} />
+            <ReactCountryFlag countryCode={currentLanguage} svg style={{ width: '2em', height: '2em' }} />
           </button>
 
           {isLanguageSelectorOpen && (
