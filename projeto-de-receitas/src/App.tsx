@@ -1,11 +1,11 @@
-import './App.css'
+import './index.css'
+import Header from './components/Header'
 
-function App() {
+export default function App() {
   return (
     <>
-       pumped up kicks
+      <Header/>
     </>
   )
 }
 
-export default App
