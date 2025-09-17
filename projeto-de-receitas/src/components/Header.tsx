@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm py-5 w-auto px-8 flex justify-between items-center relative z-50" style={{padding:"2%"}}>
+    <header className="bg-[#aa550f] shadow-sm w-auto flex justify-between items-center relative z-50 fixed" style={{padding:"1.25rem 2rem", width: "100%"}}>
       <Link 
         to="/" 
         className="flex items-center space-x-2 transform hover:scale-105 transition-transform duration-200"
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
           alt="RecipeApp Logo" 
           className="h-9" 
         />
-        <span className="text-2xl font-bold text-orange-600">RecipeApp</span>
+        <span className="text-2xl font-bold text-white">RecipeApp</span>
       </Link>
 
       <div className="hidden md:flex items-center space-x-12 w-28 relative right-44">
