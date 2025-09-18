@@ -32,38 +32,36 @@ const Header: React.FC = () => {
       </Link>
 
       <div className="hidden md:flex items-center space-x-12 w-28 relative right-44">
-      <nav className="flex items-center space-x-6 w-36 relative" style={{gap:"6%", marginRight:"50%"}}>
+      <nav className="flex items-center space-x-6 w-36 relative right-28" style={{gap:"6%"}}>
           <Link
             to="/"
-            className="flex items-center px-6 py-2 rounded-full font-semibold transition-colors duration-200"
-            style={{
-              backgroundColor: '#ffedd5',
-              color: '#d97706', 
+            className="flex items-center rounded-full font-semibold transition-colors duration-200 bg-[#ffedd5] text-[#d97706] hover:bg-[#d97706] hover:text-[#ffedd5]"
+            style={{ 
               boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
-              padding: "8%"
+              padding: "0.5rem 1.5rem",
             }}
           >
-            <FaHome className="mr-2" />
+            <FaHome style={{marginRight: "0.5rem"}} />
             Início
           </Link>
           <Link 
-            style={{padding: "8%"}}
+            style={{padding: "0.5rem 1rem", border: "2px solid white"}}
             to="/buscar" 
-            className="flex items-center px-6 py-2 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
-          >
-            <FaSearch className="mr-2" />
-            Buscar
+            className="flex items-center rounded-full font-semibold text-white hover:bg-amber-900 transition-colors duration-200"
+          > 
+            <FaSearch className="text-white"/>
+              <span style={{marginLeft: "0.5rem"}}>Buscar</span>
           </Link>
         </nav>
         
         <div className="relative" style={{}}>
           <button
             onClick={toggleLanguageSelector}
-            className="flex w-24 items-center justify-around space-x-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
-            style={{padding: '8%'}}
+            className="flex w-20 items-center justify-center space-x-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            style={{padding: '0.5rem 1rem'}}
           >
-            <FaGlobeAmericas className="text-gray-600" style={{ width: '1.5em', height: '1.5em' }} />
-            <ReactCountryFlag countryCode={currentLanguage} svg style={{ width: '2em', height: '2em' }} />
+            <FaGlobeAmericas className="text-gray-600" style={{ width: '1.5em', height: '1.5em', marginRight: '0.5rem' }} />
+            <ReactCountryFlag countryCode={currentLanguage} svg style={{ width: '1.5em', height: '1.5em' }} />
           </button>
 
           {isLanguageSelectorOpen && (
@@ -71,15 +69,17 @@ const Header: React.FC = () => {
               className="absolute top-12 right-0 w-40 bg-white border border-gray-200 rounded-lg overflow-hidden" 
               style={{
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+                padding:"8%"
               }}
             >
               <button
                 onClick={() => handleLanguageChange('BR')}
-                className={`flex items-center w-full text-left p-3 transition-colors duration-200`}
+                className={`flex items-center w-full text-left transition-colors duration-200`}
                 style={{
                   backgroundColor: currentLanguage === 'BR' ? '#ffedd5' : 'white',
                   color: currentLanguage === 'BR' ? '#d97706' : '#4b5563',
                   fontWeight: currentLanguage === 'BR' ? 'bold' : 'normal',
+                  padding: "0.5rem"
                 }}
               >
                 <ReactCountryFlag countryCode="BR" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />
@@ -87,11 +87,12 @@ const Header: React.FC = () => {
               </button>
               <button
                 onClick={() => handleLanguageChange('US')}
-                className={`flex items-center w-full text-left p-3 transition-colors duration-200`}
+                className={`flex items-center w-full text-left transition-colors duration-200`}
                 style={{
                   backgroundColor: currentLanguage === 'US' ? '#ffedd5' : 'white',
                   color: currentLanguage === 'US' ? '#d97706' : '#4b5563',
                   fontWeight: currentLanguage === 'US' ? 'bold' : 'normal',
+                  padding: "0.5rem"
                 }}
               >
                 <ReactCountryFlag countryCode="US" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />
@@ -99,11 +100,12 @@ const Header: React.FC = () => {
               </button>
               <button
                 onClick={() => handleLanguageChange('ES')}
-                className={`flex items-center w-full text-left p-3 transition-colors duration-200`}
+                className={`flex items-center w-full text-left transition-colors duration-200`}
                 style={{
                   backgroundColor: currentLanguage === 'ES' ? '#ffedd5' : 'white',
                   color: currentLanguage === 'ES' ? '#d97706' : '#4b5563',
                   fontWeight: currentLanguage === 'ES' ? 'bold' : 'normal',
+                  padding: "0.5rem"
                 }}
               >
                 <ReactCountryFlag countryCode="ES" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />

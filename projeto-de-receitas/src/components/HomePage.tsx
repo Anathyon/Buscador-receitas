@@ -31,9 +31,9 @@ const HomePage: React.FC = () => {
         <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Receitas Deliciosas</h1>
         <p className="text-lg md:text-xl mb-12">Descubra receitas incríveis de todo o mundo</p>
 
-      <div className="relative -mt-16 md:-mt-10 mb-8 z-20 flex justify-center">
+      <div className="relative z-20 flex justify-center" style={{marginTop: "4rem", marginBottom: "2rem"}}>
         <div 
-          className="flex items-center rounded-full bg-white shadow-xl max-w-xl mx-auto w-full px-2"
+          className="flex items-center rounded-full bg-white shadow-xl max-w-xl mx-auto w-[30%]"
           style={{
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
           }}
@@ -49,7 +49,7 @@ const HomePage: React.FC = () => {
                 handleSearch();
               }
             }}
-            style={{ paddingLeft: '1rem' }}
+            style={{ paddingLeft: '1rem'}}
           />
           <button
             onClick={handleSearch}
@@ -59,12 +59,10 @@ const HomePage: React.FC = () => {
               gap: "0.5rem",
             }}
           >
-             Buscar <FaSearch className="text-gray-200 ml-6 mr-2"/> 
+             <FaSearch className="text-gray-200 ml-6 mr-2"/> 
           </button>
         </div>
       </div>
-      
-      {/* Botão para mostrar/ocultar filtros */}
           <div className="flex justify-center mb-8 z-10">
             <button
               onClick={() => setShowFilters(!showFilters)}
