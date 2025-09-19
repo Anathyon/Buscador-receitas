@@ -82,7 +82,7 @@ const Header: React.FC = () => {
                   padding: "0.5rem"
                 }}
               >
-                <ReactCountryFlag countryCode="BR" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />
+                <ReactCountryFlag countryCode="BR" svg style={{ width: '1.5em', height: '1em', marginRight:"0.5rem" }} />
                 <span>Português</span>
               </button>
               <button
@@ -95,7 +95,7 @@ const Header: React.FC = () => {
                   padding: "0.5rem"
                 }}
               >
-                <ReactCountryFlag countryCode="US" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />
+                <ReactCountryFlag countryCode="US" svg style={{ width: '1.5em', height: '1em', marginRight:"0.5rem" }} />
                 <span>English</span>
               </button>
               <button
@@ -108,7 +108,7 @@ const Header: React.FC = () => {
                   padding: "0.5rem"
                 }}
               >
-                <ReactCountryFlag countryCode="ES" svg style={{ width: '1.5em', height: '1em' }} className="mr-2" />
+                <ReactCountryFlag countryCode="ES" svg style={{ width: '1.5em', height: '1em', marginRight:"0.5rem" }} />
                 <span>Español</span>
               </button>
             </div>
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } md:hidden z-40`}
       >
-        <div className="flex justify-between items-center p-6 bg-gray-50 border-b border-gray-100">
+        <div className="flex justify-between items-center bg-gray-50 border-b border-gray-100" style={{padding:"1.5rem"}}>
           <Link to="/" onClick={toggleSidebar} className="flex items-center space-x-2">
             <img src="/path/to/your/chef-hat-logo.svg" alt="RecipeApp" className="h-8" />
             <span className="text-xl font-bold text-orange-600">RecipeApp</span>
@@ -138,25 +138,28 @@ const Header: React.FC = () => {
         </div>
         <nav className="flex flex-col p-4 space-y-2">
           <Link to="/" onClick={toggleSidebar} 
-            className="flex items-center px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-orange-100 transition-colors duration-200"
+            className="flex items-center rounded-lg font-semibold text-gray-700 hover:bg-orange-100 transition-colors duration-200"
+            style={{paddingInline:"1rem", paddingBlock:"0.75rem"}}
           >
-            <FaHome className="mr-3 text-gray-500" />
+            <FaHome className="text-gray-500" style={{marginRight: "0.75rem"}} />
             <span>Início</span>
           </Link>
           <Link to="/buscar" onClick={toggleSidebar} 
-            className="flex items-center px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-orange-100 transition-colors duration-200"
+            className="flex items-center rounded-lg font-semibold text-gray-700 hover:bg-orange-100 transition-colors duration-200"
+            style={{paddingInline:"1rem", paddingBlock:"0.75rem"}}
           >
-            <FaSearch className="mr-3 text-gray-500" />
+            <FaSearch className="text-gray-500" style={{marginRight: "0.75rem"}} />
             <span>Buscar</span>
           </Link>
           
-          <hr className="my-2 border-gray-200" />
+          <hr className="border-gray-200" style={{marginBlock:"0.5rem"}}/>
 
           {/* Seletor de Idioma dentro da Sidebar */}
-          <div className="relative mt-4">
+          <div className="relative" style={{marginTop:"1rem"}}>
             <button
               onClick={toggleLanguageSelector}
-              className="flex items-center justify-between w-full px-4 py-3 rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+              className="flex items-center justify-between w-full rounded-lg font-semibold text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+              style={{paddingInline:"1rem", paddingBlock:"0.75rem"}}
             >
               <div className="flex items-center">
                 <FaGlobeAmericas className="mr-3 text-gray-500" />
@@ -170,21 +173,21 @@ const Header: React.FC = () => {
                   onClick={() => handleLanguageChange('BR')}
                   className={`flex items-center w-full text-left p-3 ${currentLanguage === 'BR' ? 'bg-orange-100 text-orange-600 font-semibold' : 'hover:bg-gray-50 text-gray-800' } transition-colors duration-200`}
                 >
-                  <ReactCountryFlag countryCode="BR" svg className="mr-2" style={{ width: '1.5em', height: '1em' }} />
+                  <ReactCountryFlag countryCode="BR" svg style={{ width: '1.5em', height: '1em', marginRight: "0.5rem" }} />
                   <span>Português</span>
                 </button>
                 <button
                   onClick={() => handleLanguageChange('US')}
                   className={`flex items-center w-full text-left p-3 ${currentLanguage === 'US' ? 'bg-orange-100 text-orange-600 font-semibold' : 'hover:bg-gray-50 text-gray-800' } transition-colors duration-200`}
                 >
-                  <ReactCountryFlag countryCode="US" svg className="mr-2" style={{ width: '1.5em', height: '1em' }} />
+                  <ReactCountryFlag countryCode="US" svg style={{ width: '1.5em', height: '1em', marginRight: "0.5rem" }} />
                   <span>English</span>
                 </button>
                 <button
                   onClick={() => handleLanguageChange('ES')}
                   className={`flex items-center w-full text-left p-3 ${currentLanguage === 'ES' ? 'bg-orange-100 text-orange-600 font-semibold' : 'hover:bg-gray-50 text-gray-800' } transition-colors duration-200`}
                 >
-                  <ReactCountryFlag countryCode="ES" svg className="mr-2" style={{ width: '1.5em', height: '1em' }} />
+                  <ReactCountryFlag countryCode="ES" svg style={{ width: '1.5em', height: '1em', marginRight: "0.5rem" }} />
                   <span>Español</span>
                 </button>
               </div>

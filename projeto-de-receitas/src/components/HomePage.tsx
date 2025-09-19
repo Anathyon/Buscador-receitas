@@ -28,8 +28,8 @@ const HomePage: React.FC = () => {
           padding: "5rem 1rem"
         }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Receitas Deliciosas</h1>
-        <p className="text-lg md:text-xl mb-12">Descubra receitas incríveis de todo o mundo</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold" style={{marginBottom: "1rem"}}>Receitas Deliciosas</h1>
+        <p className="text-lg md:text-xl" style={{marginBottom: "3rem"}}>Descubra receitas incríveis de todo o mundo</p>
 
       <div className="relative z-20 flex justify-center" style={{marginTop: "4rem", marginBottom: "2rem"}}>
         <div 
@@ -53,32 +53,32 @@ const HomePage: React.FC = () => {
           />
           <button
             onClick={handleSearch}
-            className="bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 m-2 flex flex-row items-center"
+            className="bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 flex flex-row items-center"
             style={{
               padding: "0.75rem 1rem",
               gap: "0.5rem",
+              margin: "0.5rem",
             }}
           >
-             <FaSearch className="text-gray-200 ml-6 mr-2"/> 
+             <FaSearch className="text-gray-200" style={{marginLeft: "0.3rem", marginRight: "0.3rem"}} /> 
           </button>
         </div>
       </div>
-          <div className="flex justify-center mb-8 z-10">
+          <div className="flex justify-center z-10" style={{marginBottom:"2rem"}}>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="rounded-full font-bold text-gray-700 bg-white shadow-md hover:bg-gray-50 transition-colors duration-200 flex items-center"
+              className="rounded-full font-bold text-gray-700 bg-white shadow-md hover:bg-gray-300 transition-colors duration-200 flex items-center"
               style={{
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                 padding: '0.75rem 1.5rem',
               }}
             >
-              <FaFilter className="mr-2 text-gray-500" />
+              <FaFilter className="text-gray-500" style={{marginRight: "0.5rem"}} />
               Filtrar
             </button>
           </div>
       </div>
-
-      {/* Renderiza o componente de filtros se showFilters for true */}
+      
       {showFilters && <RecipeFilters onFilter={handleFilter} />}
     </>
   );
