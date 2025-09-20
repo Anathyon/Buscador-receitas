@@ -34,9 +34,15 @@ const RecipeFilters: React.FC<RecipeFiltersProps> = ({ onFilter }) => {
 
   // 2. Lógica de seleção e filtragem
   const handleCategoryClick = (category: string) => {
-    setSelectedCategory(category === selectedCategory ? null : category);
+    const newCategory = category === selectedCategory ? null : category;
+    setSelectedCategory(newCategory);
     // Chama a função de filtro do componente pai
-    onFilter('category', category);
+    if (newCategory) {
+      onFilter('category', newCategory);
+    } else {
+      // Opcional: Se a categoria for deselecionada, você pode limpar os resultados ou mostrar as sugestões iniciais
+      onFilter('category', '');
+    }
   };
 
   const handleIngredientFilter = () => {
