@@ -1,15 +1,25 @@
 import './index.css'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import HomePage from './components/HomePage'
-import FeaturedRecipes from './components/RecipeList'
+import { LanguageProvider } from './context/LanguageProvider'
 
-export default function App() {
+const App: React.FC = () => {
   return (
-    <>
-      <Header/>
-      <HomePage/>
-      <FeaturedRecipes recipes={[]} loading={false} />
-    </>
+    <LanguageProvider>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow pt-20">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            {/* Adicione outras rotas aqui */}
+          </Routes>
+        </main>
+      </div>
+    </LanguageProvider>
   )
 }
+
+export default App
 

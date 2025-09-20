@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
 import RecipeFilters from './RecipeFilters';
 import RecipeList from './RecipeList';
-// Importe o tipo Recipe do mesmo local usado em RecipeList
-import type { Recipe } from './RecipeList'; // Certifique-se de que Recipe está exportado de RecipeList ou mova Recipe para um arquivo types.ts compartilhado e importe de lá.
+import type { Recipe } from './RecipeList'; 
 
 const HomePage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
@@ -11,7 +10,6 @@ const HomePage: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Função de busca principal que lida com todos os filtros
   const fetchRecipes = async (type: 'search' | 'category' | 'ingredient', query: string) => {
     setLoading(true);
     let url = '';
