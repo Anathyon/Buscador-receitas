@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaTimes, FaYoutube, FaUtensils, FaHourglassHalf } from 'react-icons/fa';
+import { FormattedMessage } from 'react-intl';
 
 interface Meal {
   idMeal: string;
@@ -43,9 +44,8 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4" onClick={onClose}>
       <div 
-        className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+        className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative shadow-xl"
         onClick={(e) => e.stopPropagation()}
-        style={{ boxShadow: '0 10px 15px rgba(0,0,0,0.2)' }}
       >
         <button
           onClick={onClose}
@@ -64,17 +64,15 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
               <span>•</span>
               <span>{recipe.strCategory}</span>
               <span>•</span>
-              <span>{ingredients.length} ingredientes</span>
+              <span>
+                <FormattedMessage id="modal.ingredientsCount" values={{ count: ingredients.length }} />
+              </span>
             </div>
             <div className="flex flex-wrap gap-2 mt-4">
               {recipe.strTags?.split(',').map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-yellow-100 text-yellow-600 text-xs font-semibold px-3 py-1 rounded-full"
-                  style={{
-                    backgroundColor: '#fef3c7',
-                    color: '#d97706',
-                  }}
+                  className="bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full"
                 >
                   {tag.trim()}
                 </span>
@@ -91,15 +89,15 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
             className="flex items-center justify-center bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors duration-200 mb-6"
           >
             <FaYoutube className="mr-2" />
-            Assistir Vídeo
+            <FormattedMessage id="modal.watchVideo" />
           </a>
 
           {/* Seção de Ingredientes */}
           <h3 className="text-2xl font-bold text-gray-800 flex items-center mb-4">
             <FaUtensils className="text-orange-600 mr-3" />
-            Ingredientes
+            <FormattedMessage id="modal.ingredientsTitle" />
           </h3>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-8">
             {ingredients.map((item, index) => (
               <div key={index} className="flex justify-between items-center py-2 border-b border-gray-200">
                 <span className="font-medium text-gray-700">{item.ingredient}</span>
@@ -111,7 +109,7 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
           {/* Seção de Instruções */}
           <h3 className="text-2xl font-bold text-gray-800 flex items-center mb-4">
             <FaHourglassHalf className="text-orange-600 mr-3" />
-            Modo de Preparo
+            <FormattedMessage id="modal.instructionsTitle" />
           </h3>
           <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
             {recipe.strInstructions}

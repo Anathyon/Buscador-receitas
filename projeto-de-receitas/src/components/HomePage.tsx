@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
+import { useIntl, FormattedMessage } from 'react-intl'; // 1. Importe as ferramentas
 import RecipeFilters from './RecipeFilters';
 import RecipeList from './RecipeList';
-import type { Recipe } from './RecipeList'; 
+import type { Recipe } from './RecipeList';
 
 const HomePage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
+  const intl = useIntl(); // 2. Inicialize o hook
 
   const fetchRecipes = async (type: 'search' | 'category' | 'ingredient', query: string) => {
     setLoading(true);
@@ -58,12 +60,17 @@ const HomePage: React.FC = () => {
           padding: "5rem 1rem"
         }}
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold" style={{marginBottom: "1rem"}}>Receitas Deliciosas</h1>
-        <p className="text-lg md:text-xl" style={{marginBottom: "3rem"}}>Descubra receitas incríveis de todo o mundo</p>
+        {/* 3. Use FormattedMessage para textos no JSX */}
+        <h1 className="text-4xl md:text-5xl font-extrabold" style={{marginBottom: "1rem"}}>
+          <FormattedMessage id="home.title" />
+        </h1>
+        <p className="text-lg md:text-xl" style={{marginBottom: "3rem"}}>
+          <FormattedMessage id="home.subtitle" />
+        </p>
 
         <div className="relative z-20 flex justify-center" style={{marginTop: "4rem", marginBottom: "2rem"}}>
           <div 
-            className="flex items-center rounded-full bg-white shadow-xl max-w-xl mx-auto w-full px-2"
+            className="flex items-center rounded-full bg-white shadow-xl max-w-2xl mx-auto w-full px-2"
             style={{
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
             }}
@@ -71,37 +78,29 @@ const HomePage: React.FC = () => {
             <FaSearch className="text-gray-400 ml-6 mr-2" />
             <input
               type="text"
-              placeholder="Busque por receitas..."
+              // 4. Use intl.formatMessage para atributos
+              placeholder={intl.formatMessage({ id: 'home.searchPlaceholder' })}
               className="flex-1 py-4 text-gray-800 rounded-full focus:outline-none placeholder-gray-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch();
-                }
+                if (e.key === 'Enter') { handleSearch() }
               }}
             />
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="text-gray-500 hover:text-orange-600 p-3 rounded-full transition-colors duration-200"
+              title={intl.formatMessage({ id: 'home.toggleFilters' })}
+            >
+              <FaFilter />
+            </button>
             <button
               onClick={handleSearch}
               className="bg-orange-600 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 m-2"
             >
-              Buscar
+              <FormattedMessage id="home.searchButton" />
             </button>
           </div>
-        </div>
-        
-        <div className="flex justify-center z-10" style={{marginBottom:"2rem"}}>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="rounded-full font-bold text-gray-700 bg-white shadow-md hover:bg-gray-300 transition-colors duration-200 flex items-center"
-            style={{
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              padding: '0.75rem 1.5rem',
-            }}
-          >
-            <FaFilter className="text-gray-500" style={{marginRight: "0.5rem"}} />
-            Filtrar
-          </button>
         </div>
       </div>
       
