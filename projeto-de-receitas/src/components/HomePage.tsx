@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
-import { useIntl, FormattedMessage } from 'react-intl'; // 1. Importe as ferramentas
+import { useIntl, FormattedMessage } from 'react-intl';
 import RecipeFilters from './RecipeFilters';
-import RecipeList from './RecipeList';
-import type { Recipe } from './RecipeList';
+import RecipeList, { type Recipe } from './RecipeList';
 
 const HomePage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
-  const intl = useIntl(); // 2. Inicialize o hook
+  const intl = useIntl();
 
-  const fetchRecipes = async (type: 'search' | 'category' | 'ingredient', query: string) => {
+  const fetchRecipes = useCallback(async (type: 'search' | 'category' | 'ingredient' | 'random', query?: string) => {
     setLoading(true);
     let url = '';
+
+    if (type === 'random') {
+      // Para a busca aleatória, faremos 10 chamadas em paralelo para o endpoint de receita única aleatória
+      const randomPromises = Array.from({ length: 10 }, () => fetch('https://www.themealdb.com/api/json/v1/1/random.php').then(res => res.json()));
+      try {
+        const results = await Promise.all(randomPromises);
+        const meals = results.map(result => result.meals[0]);
+        setRecipes(meals);
+      } catch (error) {
+        console.error("Erro ao buscar receitas aleatórias:", error);
+        setRecipes([]);
+      } finally {
+        setLoading(false);
+      }
+      return; // Encerra a função aqui para a busca aleatória
+    }
 
     if (type === 'search') {
       url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
@@ -27,19 +42,21 @@ const HomePage: React.FC = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setRecipes(data.meals || []);
+      const meals: Recipe[] = data.meals || [];
+      // Não vamos mais traduzir o nome na lista principal
+      setRecipes(meals);
     } catch (error) {
       console.error("Erro ao buscar receitas:", error);
       setRecipes([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Removido 'locale' pois a tradução agora é só no modal
 
-  // Busca inicial de sugestões ao carregar a página
+  // Efeito para busca inicial aleatória
   useEffect(() => {
-    fetchRecipes('search', 'a');
-  }, []);
+    fetchRecipes('random');
+  }, [fetchRecipes]);
 
   const handleSearch = () => {
     if (searchQuery.trim() !== '') {

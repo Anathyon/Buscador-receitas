@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useIntl, FormattedMessage } from 'react-intl';
 import RecipeModal from './RecipeModal';
+import { useLanguage } from '../context/useLanguage';
+import { translateText } from '../utils/translator';
 
 // Defina a mesma interface de receita
 export interface Recipe {
@@ -25,14 +27,62 @@ interface RecipeListProps {
 const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const intl = useIntl();
+  const { locale } = useLanguage();
 
   const openModal = async (mealId: string) => {
-    // Busca os detalhes completos da receita
     try {
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
       const data = await response.json();
+      
       if (data.meals && data.meals.length > 0) {
-        setSelectedRecipe(data.meals[0]);
+        let meal: Recipe = data.meals[0];
+
+        if (locale !== 'en') {
+          const translatedMeal = { ...meal };
+
+          // 1. Traduzir campos simples (exceto o nome da receita)
+          const [translatedCategory, translatedArea] = await Promise.all([
+            translateText(meal.strCategory, locale),
+            translateText(meal.strArea, locale),
+          ]);
+          translatedMeal.strCategory = translatedCategory;
+          translatedMeal.strArea = translatedArea;
+
+          // 2. Traduzir ingredientes e medidas
+          const ingredientPromises = [];
+          for (let i = 1; i <= 20; i++) {
+            ingredientPromises.push(translateText(meal[`strIngredient${i}`], locale));
+            ingredientPromises.push(translateText(meal[`strMeasure${i}`], locale));
+          }
+          const translatedIngredients = await Promise.all(ingredientPromises);
+          let ingIndex = 0;
+          for (let i = 1; i <= 20; i++) {
+            translatedMeal[`strIngredient${i}`] = translatedIngredients[ingIndex++];
+            translatedMeal[`strMeasure${i}`] = translatedIngredients[ingIndex++];
+          }
+
+          // 3. Traduzir instruções parágrafo por parágrafo (COM CORREÇÃO)
+          if (meal.strInstructions) {
+            // Divide as instruções em parágrafos, usando uma expressão regular para \n ou \r\n
+            const paragraphs = meal.strInstructions.split(/\r?\n/).filter(p => p.trim() !== '');
+            
+            const instructionPromises = paragraphs.map(p => {
+              // Remove a numeração (ex: "1. ") antes de traduzir para evitar bugs
+              const textOnly = p.replace(/^\d+\.\s*/, '');
+              return translateText(textOnly, locale);
+            });
+
+            const translatedParagraphs = await Promise.all(instructionPromises);
+
+            // Remonta as instruções, adicionando a numeração de volta
+            translatedMeal.strInstructions = translatedParagraphs.map((p, index) => {
+              return `${index + 1}. ${p}`;
+            }).join('\n\n');
+          }
+          
+          meal = translatedMeal;
+        }
+        setSelectedRecipe(meal);
       }
     } catch (error) {
       console.error(intl.formatMessage({ id: 'recipeList.fetchError' }), error);
