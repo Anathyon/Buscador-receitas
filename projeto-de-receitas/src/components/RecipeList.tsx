@@ -114,17 +114,19 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
   }
 
   return (
-    <div className="py-12">
-      <div className="text-center mb-8">
+    <div className="relative left-[2.6rem]" style={{paddingBlock:"3rem"}}>
+      <div className="text-center" style={{marginBottom:"2rem"}}>
         <h2 className="text-3xl font-bold text-gray-800">
           <FormattedMessage id="recipeList.title" />
         </h2>
-        <p className="text-gray-600 mt-2">
+        <p className="text-gray-600" style={{marginTop:"0.5rem"}}>
           <FormattedMessage id="recipeList.subtitle" />
         </p>
       </div>
 
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+        style={{gap:"1.5rem", paddingInline:"1rem"}}
+      >
         {recipes.map(recipe => (
           <div
             key={recipe.idMeal}
@@ -137,21 +139,24 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
                 alt={recipe.strMeal}
                 className="w-full h-48 object-cover"
               />
-              <div className="absolute top-2 left-2 bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-semibold">
+              <div className="absolute top-2 left-2 bg-orange-100 text-orange-600 rounded-full text-xs font-semibold"
+                style={{paddingInline:"0.75rem", paddingBlock:"0.25rem"}}
+              >
                 {recipe.strCategory}
               </div>
             </div>
-            <div className="p-4">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">{recipe.strMeal}</h3>
-              <div className="flex items-center text-gray-500 text-sm mb-2">
-                <FaMapMarkerAlt className="mr-2 text-gray-400" />
+            <div style={{padding:"1rem"}}>
+              <h3 className="text-lg font-bold text-gray-800" style={{marginBottom:"0.5rem"}}>{recipe.strMeal}</h3>
+              <div className="flex items-center text-gray-500 text-sm" style={{marginBottom:"0.5rem"}}>
+                <FaMapMarkerAlt className="text-gray-400" style={{marginRight:"0.5rem"}} />
                 <span>{recipe.strArea}</span>
               </div>
-              <div className="flex flex-wrap gap-2 mt-4">
+              <div className="flex flex-wrap" style={{gap:"0.5rem", marginTop:"1rem"}}>
                 {recipe.strTags?.split(',').map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-amber-100 text-amber-700 text-xs font-semibold px-3 py-1 rounded-full"
+                    className="bg-amber-100 text-amber-700 text-xs font-semibold rounded-full"
+                    style={{paddingInline:"0.75rem", paddingBlock:"0.25rem"}}
                   >
                     {tag.trim()}
                   </span>
