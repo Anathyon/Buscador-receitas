@@ -10,10 +10,9 @@ const App: React.FC = () => {
     <LanguageProvider>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow pt-20">
+        <main className="flex-grow pt-20" style={{ paddingTop: "2rem" }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* Adicione outras rotas aqui */}
           </Routes>
         </main>
       </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactCountryFlag from 'react-country-flag';
-import { FaBars, FaHome, FaSearch, FaTimes, FaGlobeAmericas } from 'react-icons/fa';
+import { FaBars, FaHome, FaTimes, FaGlobeAmericas } from 'react-icons/fa';
 import { FormattedMessage } from 'react-intl';
 import { useLanguage } from '../context/useLanguage';
 
@@ -48,14 +48,6 @@ const Header: React.FC = () => {
             <FaHome style={{ marginRight: '0.5rem' }} />
             <FormattedMessage id="header.home" />
           </Link>
-          <Link
-            to="/buscar"
-            className="flex items-center rounded-full font-semibold text-white border-2 border-white hover:bg-amber-900 transition-colors duration-200"
-            style={{ paddingInline: "1rem", paddingBlock: "0.5rem" }}
-          >
-            <FaSearch style={{ marginRight: '0.5rem' }} />
-            <FormattedMessage id="header.search" />
-          </Link>
         </nav>
 
         <div className="relative" style={{ marginLeft: "1rem", marginRight: "0.5rem" }}>
@@ -86,7 +78,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Mobile Menu Icon */}
-      <button onClick={toggleSidebar} className="md:hidden p-2 text-white focus:outline-none">
+      <button onClick={toggleSidebar} className="md:hidden text-white focus:outline-none" style={{padding: "0.5rem"}}>
         <FaBars size={24} />
       </button>
 
@@ -98,26 +90,17 @@ const Header: React.FC = () => {
             <FaTimes size={24} />
           </button>
         </div>
-        <nav className="flex flex-col" style={{ padding: "1rem", gap: "0.5rem" }}>
+        <nav className="flex flex-col" style={{ padding: "1rem"}}>
           <Link
             to="/"
             onClick={toggleSidebar}
             className="flex items-center rounded-lg font-semibold text-gray-700 hover:bg-orange-100"
             style={{ padding: "0.75rem" }}
           >
-            <FaHome className="mr-3 text-gray-500" />
-            <FormattedMessage id="header.home" />
+            <FaHome className="text-gray-500" style={{ marginRight: "0.75rem" }} />
+            <FormattedMessage id="header.home"/>
           </Link>
-          <Link
-            to="/buscar"
-            onClick={toggleSidebar}
-            className="flex items-center rounded-lg font-semibold text-gray-700 hover:bg-orange-100"
-            style={{ padding: "0.75rem" }}
-          >
-            <FaSearch className="mr-3 text-gray-500" />
-            <FormattedMessage id="header.search" />
-          </Link>
-          <hr style={{ marginBlock: "0.5rem" }} className="my-2" />
+          <hr style={{ marginBlock: "0.5rem" }}/>
           <div style={{ padding: "0.75rem" }}>
             <h3 className="font-semibold text-gray-700" style={{ marginBottom: "0.5rem" }}><FormattedMessage id="header.language" /></h3>
             <div className="space-y-2" style={{ gap: "0.5rem" }}>

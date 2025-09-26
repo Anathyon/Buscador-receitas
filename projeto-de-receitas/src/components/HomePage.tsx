@@ -95,6 +95,7 @@ const HomePage: React.FC = () => {
               }}
             >
               <input
+                id='buscar'
                 type="text"
                 style={{ paddingBlock: "1rem", paddingLeft: "1.5rem"}}
                 placeholder={intl.formatMessage({ id: 'home.searchPlaceholder' })}
