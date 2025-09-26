@@ -68,7 +68,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <div
-        className="bg-gradient-to-r from-orange-500 to-red-600 text-white md:px-16 relative"
+        className="bg-gradient-to-r from-orange-500 to-red-600 text-white relative"
         style={{
           backgroundImage: `url('/svg/Wave.svg')`,
           backgroundSize: 'cover',
@@ -94,12 +94,11 @@ const HomePage: React.FC = () => {
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
               }}
             >
-              <FaSearch className="text-gray-400" style={{ marginLeft: "1.5rem", marginRight: "0.5rem" }} />
               <input
                 type="text"
-                style={{ paddingBlock: "1rem" }}
+                style={{ paddingBlock: "1rem", paddingLeft: "1.5rem"}}
                 placeholder={intl.formatMessage({ id: 'home.searchPlaceholder' })}
-                className="flex-1 text-gray-800 rounded-full focus:outline-none placeholder-gray-500"
+                className="flex-1 text-gray-800 rounded-full focus:outline-none placeholder-gray-500 mobile-search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -114,13 +113,27 @@ const HomePage: React.FC = () => {
               >
                 <FaFilter />
               </button>
+              
               <button
                 onClick={handleSearch}
-                className="bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 flex-shrink-0 md:w-auto"
-                style={{ paddingInline: "2rem", paddingBlock: "0.75rem", margin: "0.5rem 0.5rem 0.5rem 0.2rem" }}
+                className="bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 flex-shrink-0 md:w-auto mobile-search-button-icon"
+                style={{ margin: "0.5rem 0.7rem 0.5rem 0.2rem", padding: "0.75rem" }}
+                aria-label={intl.formatMessage({ id: 'home.searchButton' })}
               >
-                <FormattedMessage id="home.searchButton" />
+                <FaSearch />
               </button>
+
+              <style>{`
+                @media (max-width: 576px) {
+                  .mobile-search-input {
+                    padding-left: 1.5rem !important;
+                    padding-right: 0.5rem !important;
+                  }
+                  .mobile-search-button-icon {
+                    padding: 0.7rem !important;
+                  }
+                }
+              `}</style>
             </div>
           </div>
         </div>
