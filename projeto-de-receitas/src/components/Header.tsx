@@ -33,7 +33,7 @@ const Header: React.FC = () => {
   return (
     <header className="bg-[#aa550f] shadow-md w-full flex justify-between items-center sm:px-8 fixed top-0 z-50" style={{ paddingInline: "1rem", paddingBlock: "0.75rem" }}>
       <Link to="/" className="flex items-center transform hover:scale-105 transition-transform duration-200" style={{ gap: "0.5rem" }}>
-        <img src="/png-icon/cook-book.png" alt="RecipeApp Logo" className="h-9" />
+        <img src="/icon/cook-book.png" alt="RecipeApp Logo" className="h-9" />
         <span className="text-2xl font-bold text-white"><FormattedMessage id="header.appName" /></span>
       </Link>
 
