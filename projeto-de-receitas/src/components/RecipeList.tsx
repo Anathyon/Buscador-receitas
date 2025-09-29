@@ -29,6 +29,20 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
 	const intl = useIntl();
 	const { locale } = useLanguage();
 
+	// --- CORREÇÃO DE CHAVES DUPLICADAS: Filtra a lista de receitas para garantir que todos os ID's sejam únicos.
+	// Isso impede o erro do React causado por IDs duplicados da API TheMealDB ao buscar receitas aleatórias.
+	const uniqueRecipeIds = new Set<string>();
+	const uniqueRecipes = recipes.filter(recipe => {
+		if (!recipe.idMeal) return false; // Ignora receitas sem ID, por segurança
+
+		if (!uniqueRecipeIds.has(recipe.idMeal)) {
+			uniqueRecipeIds.add(recipe.idMeal);
+			return true;
+		}
+		return false;
+	});
+	// --- FIM DA CORREÇÃO
+
 	const openModal = async (mealId: string) => {
 		try {
 			const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
@@ -89,6 +103,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
 		setSelectedRecipe(null);
 	};
 
+	// A renderização agora usa uniqueRecipes, garantindo chaves únicas.
 	if (loading) {
 		return (
 			<div className="text-center" style={{ paddingBlock: "3rem" }}>
@@ -99,7 +114,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
 		);
 	}
 
-	if (recipes.length === 0) {
+	if (uniqueRecipes.length === 0) {
 		return (
 			<div className="text-center" style={{ paddingBlock: "3rem" }}>
 				<h2 className="text-2xl font-bold text-gray-800">
@@ -124,7 +139,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
 					className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 					style={{ gap: "1.5rem", paddingInline: "1rem" }}
 				>
-					{recipes.map(recipe => (
+					{uniqueRecipes.map(recipe => (
 						<div
 							key={recipe.idMeal}
 							className="bg-white rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-200 shadow-md"
