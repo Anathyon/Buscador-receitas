@@ -36,11 +36,14 @@ O projeto conecta-se à API **TheMealDB** para fornecer dados de culinária aut�
 
 ## 🖼️ Layout Responsivo
 
-O design foi pensado para ser acessível em qualquer tela.
+> 💻 Desktop | 📱 Mobile
 
-**Desktop**  
-
-**Mobile**  
+| Desktop             | Mobile              |
+|---------------------|---------------------|
+<div align="center">
+  <img src="https://github.com/Anathyon/Buscador-receitas/blob/main/projeto-de-receitas/public/assets/Descktop-app.png" width="400" alt="Versão Desktop" />
+  <img src="https://github.com/Anathyon/Buscador-receitas/blob/main/projeto-de-receitas/public/assets/Mobile-app.jpg" width="250" alt="Versão Mobile" />
+</div>
 
 ---
 
