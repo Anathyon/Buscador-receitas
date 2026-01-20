@@ -4,185 +4,156 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import RecipeModal from './RecipeModal';
 import { useLanguage } from '../context/useLanguage';
 import { translateText } from '../utils/translator';
-
-// Defina a mesma interface de receita
-export interface Recipe {
-	idMeal: string;
-	strMeal: string;
-	strMealThumb: string;
-	strArea: string;
-	strCategory: string;
-	strTags: string;
-	strYoutube: string;
-	strInstructions: string;
-	// Campos de ingrediente e medida
-	[key: string]: string | null;
-}
+import type { Recipe } from '../types/recipe';
+import { recipeService } from '../services/recipeService';
 
 interface RecipeListProps {
-	recipes: Recipe[];
-	loading: boolean;
+  recipes: Recipe[];
+  loading: boolean;
 }
 
+/**
+ * Componente que exibe a grade de receitas.
+ */
 const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
-	const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-	const intl = useIntl();
-	const { locale } = useLanguage();
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const intl = useIntl();
+  const { locale } = useLanguage();
 
-	// --- CORREÇÃO DE CHAVES DUPLICADAS: Filtra a lista de receitas para garantir que todos os ID's sejam únicos.
-	// Isso impede o erro do React causado por IDs duplicados da API TheMealDB ao buscar receitas aleatórias.
-	const uniqueRecipeIds = new Set<string>();
-	const uniqueRecipes = recipes.filter(recipe => {
-		if (!recipe.idMeal) return false; // Ignora receitas sem ID, por segurança
+  /**
+   * Filtra chaves duplicadas da API.
+   */
+  const uniqueRecipes = Array.from(new Map(recipes.map(r => [r.idMeal, r])).values());
 
-		if (!uniqueRecipeIds.has(recipe.idMeal)) {
-			uniqueRecipeIds.add(recipe.idMeal);
-			return true;
-		}
-		return false;
-	});
-	// --- FIM DA CORREÇÃO
+  /**
+   * Abre o modal com detalhes da receita, traduzindo se necessário.
+   */
+  const openModal = async (mealId: string) => {
+    try {
+      const meal = await recipeService.fetchRecipeDetail(mealId);
 
-	const openModal = async (mealId: string) => {
-		try {
-			const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`);
-			const data = await response.json();
+      if (meal) {
+        let finalMeal = { ...meal };
 
-			if (data.meals && data.meals.length > 0) {
-				let meal: Recipe = data.meals[0];
+        if (locale !== 'en') {
+          // Tradução paralela de campos básicos
+          const [translatedCategory, translatedArea] = await Promise.all([
+            translateText(meal.strCategory, locale),
+            translateText(meal.strArea, locale),
+          ]);
+          finalMeal.strCategory = translatedCategory || meal.strCategory;
+          finalMeal.strArea = translatedArea || meal.strArea;
 
-				if (locale !== 'en') {
-					const translatedMeal = { ...meal };
+          // Tradução de ingredientes e medidas (paralelizada)
+          const translationPairs: Promise<string>[] = [];
+          for (let i = 1; i <= 20; i++) {
+            translationPairs.push(translateText(meal[`strIngredient${i}` as keyof Recipe] as string || '', locale));
+            translationPairs.push(translateText(meal[`strMeasure${i}` as keyof Recipe] as string || '', locale));
+          }
+          
+          const translatedValues = await Promise.all(translationPairs);
+          
+          for (let i = 1; i <= 20; i++) {
+            finalMeal[`strIngredient${i}` as keyof Recipe] = translatedValues[(i - 1) * 2] || null;
+            finalMeal[`strMeasure${i}` as keyof Recipe] = translatedValues[(i - 1) * 2 + 1] || null;
+          }
 
-					// 1. Traduzir campos simples (exceto o nome da receita)
-					const [translatedCategory, translatedArea] = await Promise.all([
-						translateText(meal.strCategory, locale),
-						translateText(meal.strArea, locale),
-					]);
-					translatedMeal.strCategory = translatedCategory;
-					translatedMeal.strArea = translatedArea;
+          // Tradução das instruções
+          if (meal.strInstructions) {
+            const paragraphs = meal.strInstructions.split(/\r?\n/).filter(p => p.trim() !== '');
+            const translatedParagraphs = await Promise.all(
+              paragraphs.map(p => translateText(p.replace(/^\d+\.\s*/, ''), locale))
+            );
+            finalMeal.strInstructions = translatedParagraphs.map((p, idx) => `${idx + 1}. ${p}`).join('\n\n');
+          }
+        }
+        setSelectedRecipe(finalMeal);
+      }
+    } catch (error) {
+      console.error(intl.formatMessage({ id: 'recipeList.fetchError' }), error);
+    }
+  };
 
-					// 2. Traduzir ingredientes e medidas
-					const ingredientPromises = [];
-					for (let i = 1; i <= 20; i++) {
-						ingredientPromises.push(translateText(meal[`strIngredient${i}`] ?? '', locale));
-						ingredientPromises.push(translateText(meal[`strMeasure${i}`] ?? '', locale));
-					}
-					const translatedIngredients = await Promise.all(ingredientPromises);
-					let ingIndex = 0;
-					for (let i = 1; i <= 20; i++) {
-						translatedMeal[`strIngredient${i}`] = translatedIngredients[ingIndex++];
-						translatedMeal[`strMeasure${i}`] = translatedIngredients[ingIndex++];
-					}
+  const closeModal = () => setSelectedRecipe(null);
 
-					// 3. Traduzir instruções parágrafo por parágrafo (COM CORREÇÃO)
-					if (meal.strInstructions) {
-						const paragraphs = meal.strInstructions.split(/\r?\n/).filter(p => p.trim() !== '');
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mb-4"></div>
+        <h2 className="text-xl font-medium text-gray-600">
+          <FormattedMessage id="recipeList.loading" />
+        </h2>
+      </div>
+    );
+  }
 
-						const instructionPromises = paragraphs.map(p => {
-							const textOnly = p.replace(/^\d+\.\s*/, '');
-							return translateText(textOnly, locale);
-						});
+  if (uniqueRecipes.length === 0) {
+    return (
+      <div className="text-center py-20 opacity-60">
+        <h2 className="text-2xl font-bold">
+          <FormattedMessage id="recipeList.noResults" />
+        </h2>
+      </div>
+    );
+  }
 
-						const translatedParagraphs = await Promise.all(instructionPromises);
+  return (
+    <div className="space-y-12">
+      <div className="text-center space-y-2">
+        <h2 className="text-4xl font-bold text-gray-800">
+          <FormattedMessage id="recipeList.title" />
+        </h2>
+        <p className="text-lg text-gray-500 max-w-lg mx-auto">
+          <FormattedMessage id="recipeList.subtitle" />
+        </p>
+      </div>
 
-						translatedMeal.strInstructions = translatedParagraphs.map((p, index) => {
-							return `${index + 1}. ${p}`;
-						}).join('\n\n');
-					}
-					meal = translatedMeal;
-				}
-				setSelectedRecipe(meal);
-			}
-		} catch (error) {
-			console.error(intl.formatMessage({ id: 'recipeList.fetchError' }), error);
-		}
-	};
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {uniqueRecipes.map(recipe => (
+          <article
+            key={recipe.idMeal}
+            className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 cursor-pointer flex flex-col h-full border border-gray-100"
+            onClick={() => openModal(recipe.idMeal)}
+          >
+            <div className="relative overflow-hidden aspect-video">
+              <img
+                src={recipe.strMealThumb}
+                alt={recipe.strMeal}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-orange-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                {recipe.strCategory}
+              </span>
+            </div>
+            
+            <div className="p-6 flex flex-col flex-grow">
+              <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                {recipe.strMeal}
+              </h3>
+              
+              <div className="flex items-center text-gray-400 text-sm mb-4">
+                <FaMapMarkerAlt className="mr-2" />
+                <span>{recipe.strArea}</span>
+              </div>
 
-	const closeModal = () => {
-		setSelectedRecipe(null);
-	};
+              <div className="mt-auto pt-4 flex flex-wrap gap-2">
+                {recipe.strTags?.split(',').slice(0, 3).map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-50 text-gray-500 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded"
+                  >
+                    {tag.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
 
-	// A renderização agora usa uniqueRecipes, garantindo chaves únicas.
-	if (loading) {
-		return (
-			<div className="text-center" style={{ paddingBlock: "3rem" }}>
-				<h2 className="text-2xl font-bold text-gray-800">
-					<FormattedMessage id="recipeList.loading" />
-				</h2>
-			</div>
-		);
-	}
-
-	if (uniqueRecipes.length === 0) {
-		return (
-			<div className="text-center" style={{ paddingBlock: "3rem" }}>
-				<h2 className="text-2xl font-bold text-gray-800">
-					<FormattedMessage id="recipeList.noResults" />
-				</h2>
-			</div>
-		);
-	}
-
-	return (
-		<div className="relative" style={{ paddingBlock: "3rem" }}>
-			<div className="text-center" style={{ marginBottom: "2rem" }}>
-				<h2 className="text-3xl font-bold text-gray-500">
-					<FormattedMessage id="recipeList.title" />
-				</h2>
-				<p className="text-gray-600" style={{ marginTop: "0.5rem" }}>
-					<FormattedMessage id="recipeList.subtitle" />
-				</p>
-			</div>
-			<div className="flex justify-center">
-				<div
-					className="w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-					style={{ gap: "1.5rem", paddingInline: "1rem" }}
-				>
-					{uniqueRecipes.map(recipe => (
-						<div
-							key={recipe.idMeal}
-							className="bg-white rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-transform duration-200 shadow-md"
-							onClick={() => openModal(recipe.idMeal)}
-						>
-							<div className="relative">
-								<img
-									src={recipe.strMealThumb}
-									alt={recipe.strMeal}
-									className="w-full h-48 object-cover"
-								/>
-								<div
-									className="absolute top-2 left-2 bg-orange-100 text-orange-600 rounded-full text-xs font-semibold"
-									style={{ paddingInline: "0.75rem", paddingBlock: "0.25rem" }}
-								>
-									{recipe.strCategory}
-								</div>
-							</div>
-							<div style={{ padding: "1rem" }}>
-								<h3 className="text-lg font-bold text-gray-800" style={{ marginBottom: "0.5rem" }}>{recipe.strMeal}</h3>
-								<div className="flex items-center text-gray-500 text-sm" style={{ marginBottom: "0.5rem" }}>
-									<FaMapMarkerAlt className="text-gray-400" style={{ marginRight: "0.5rem" }} />
-									<span>{recipe.strArea}</span>
-								</div>
-								<div className="flex flex-wrap" style={{ gap: "0.5rem", marginTop: "1rem" }}>
-									{recipe.strTags?.split(',').map((tag, index) => (
-										<span
-											key={index}
-											className="bg-amber-100 text-amber-700 text-xs font-semibold rounded-full"
-											style={{ paddingInline: "0.75rem", paddingBlock: "0.25rem" }}
-										>
-											{tag.trim()}
-										</span>
-									))}
-								</div>
-							</div>
-						</div>
-					))}
-				</div>
-			</div>
-			{selectedRecipe && <RecipeModal recipe={selectedRecipe} onClose={closeModal} />}
-		</div>
-	);
+      {selectedRecipe && <RecipeModal recipe={selectedRecipe} onClose={closeModal} />}
+    </div>
+  );
 };
 
 export default RecipeList;

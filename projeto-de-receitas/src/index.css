@@ -1,12 +1,69 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
 
-*{
-   box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* Hero Section com Gradiente Premium e Hero Image simulada */
+.hero-section {
+  min-height: 50vh;
+  background: linear-gradient(135deg, #f97316 0%, #dc2626 100%), url('/svg/Wave.svg') no-repeat bottom;
+  background-size: cover;
+  padding: 8rem 0;
+  position: relative;
+  overflow: hidden;
 }
 
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Estilização da Barra de Busca */
+.search-container-v2 {
+  perspective: 1000px;
+}
+
+.search-bar-wrapper {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar-wrapper:focus-within {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Estilos Globais para Layout */
 body {
-    font-family: "Work Sans", sans-serif;
-    background-color: #dac6b3;
+  @apply bg-gray-50 text-gray-900;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Transições Suaves */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Melhorias para Mobile */
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 6rem 0;
+    min-height: auto;
+  }
+  
+  .mobile-search-input {
+    padding-left: 1rem !important;
+    font-size: 1rem !important;
+  }
 }

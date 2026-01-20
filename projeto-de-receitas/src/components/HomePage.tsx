@@ -1,148 +1,98 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { FaSearch, FaFilter } from 'react-icons/fa';
 import { useIntl, FormattedMessage } from 'react-intl';
 import RecipeFilters from './RecipeFilters';
-import RecipeList, { type Recipe } from './RecipeList';
+import RecipeList from './RecipeList';
+import { useRecipes } from '../hooks/useRecipes';
 
+/**
+ * Componente da página inicial.
+ * Gerencia a busca, filtros e exibição da lista de receitas.
+ */
 const HomePage: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { recipes, loading, loadRecipes } = useRecipes();
   const intl = useIntl();
 
-  const fetchRecipes = useCallback(async (type: 'search' | 'category' | 'ingredient' | 'random', query?: string) => {
-    setLoading(true);
-    let url = '';
-
-    if (type === 'random') {
-      const randomPromises = Array.from({ length: 10 }, () => fetch('https://www.themealdb.com/api/json/v1/1/random.php').then(res => res.json()));
-      try {
-        const results = await Promise.all(randomPromises);
-        const meals = results.map(result => result.meals[0]);
-        setRecipes(meals);
-      } catch (error) {
-        console.error("Erro ao buscar receitas aleatórias:", error);
-        setRecipes([]);
-      } finally {
-        setLoading(false);
-      }
-      return;
-    }
-
-    if (type === 'search') {
-      url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
-    } else if (type === 'category') {
-      url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${query}`;
-    } else if (type === 'ingredient') {
-      url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${query}`;
-    }
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const meals: Recipe[] = data.meals || [];
-      setRecipes(meals);
-    } catch (error) {
-      console.error("Erro ao buscar receitas:", error);
-      setRecipes([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchRecipes('random');
-  }, [fetchRecipes]);
-
+  /**
+   * Executa a busca baseada no texto inserido pelo usuário.
+   */
   const handleSearch = () => {
     if (searchQuery.trim() !== '') {
-      fetchRecipes('search', searchQuery.trim());
+      loadRecipes('search', searchQuery.trim());
     }
   };
 
+  /**
+   * Aplica filtros de categoria ou ingrediente.
+   */
   const handleFilter = (type: 'category' | 'ingredient', value: string) => {
-    fetchRecipes(type, value);
+    if (value) {
+      loadRecipes(type, value);
+    } else {
+      // Se o valor for vazio (ex: desselecionar categoria), volta para aleatórias
+      loadRecipes('random');
+    }
   };
 
   return (
     <>
-      <div
-        className="bg-gradient-to-r from-orange-500 to-red-600 text-white relative"
-        style={{
-          backgroundImage: `url('/svg/Wave.svg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          padding: "10rem 1rem",
-          minHeight: '400px', // Adicionei uma altura mínima para visualização
-        }}
-      >
-        <div className="text-center md:px-16 mx-auto" style={{maxWidth: '1800px'}}>
-          <h1 className="text-5xl md:text-5xl font-extrabold" style={{ marginBottom: "1rem" }}>
+      <section className="hero-section text-white flex items-center">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
             <FormattedMessage id="home.title" />
           </h1>
-          <p className="text-lg md:text-xl" style={{ marginBottom: "3rem" }}>
+          <p className="text-lg md:text-2xl mb-12 max-w-2xl mx-auto opacity-90">
             <FormattedMessage id="home.subtitle" />
           </p>
 
-          {/* Container de Busca */}
-          <div className="relative z-20 flex justify-center px-4 md:px-0" style={{ marginTop: "4rem", marginBottom: "2rem" }}>
-            <div
-              className="flex items-center rounded-full bg-white shadow-xl w-full sm:w-[90%] md:w-[75%] lg:w-[60%] xl:w-[50%]"
-              style={{
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-              }}
-            >
+          {/* Container de Busca com Design Aprimorado */}
+          <div className="search-container-v2 max-w-3xl mx-auto">
+            <div className="search-bar-wrapper flex items-center bg-white rounded-full p-1 shadow-2xl transition-all duration-300 focus-within:ring-4 focus-within:ring-orange-300">
               <input
                 id='buscar'
                 type="text"
-                style={{ paddingBlock: "1rem", paddingLeft: "1.5rem"}}
                 placeholder={intl.formatMessage({ id: 'home.searchPlaceholder' })}
-                className="flex-1 text-gray-800 rounded-full focus:outline-none placeholder-gray-500 mobile-search-input"
+                className="flex-1 text-gray-800 bg-transparent py-4 px-6 rounded-full focus:outline-none placeholder-gray-400 text-lg mobile-search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') { handleSearch() }
                 }}
               />
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="text-gray-500 hover:text-orange-600 rounded-full transition-colors duration-200"
-                title={intl.formatMessage({ id: 'home.toggleFilters' })}
-                style={{ padding: "0.75rem" }}
-              >
-                <FaFilter />
-              </button>
               
-              <button
-                onClick={handleSearch}
-                className="bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors duration-200 flex-shrink-0 md:w-auto mobile-search-button-icon"
-                style={{ margin: "0.5rem 0.7rem 0.5rem 0.2rem", padding: "0.75rem" }}
-                aria-label={intl.formatMessage({ id: 'home.searchButton' })}
-              >
-                <FaSearch />
-              </button>
-
-              <style>{`
-                @media (max-width: 576px) {
-                  .mobile-search-input {
-                    padding-left: 1.5rem !important;
-                    padding-right: 0.5rem !important;
-                  }
-                  .mobile-search-button-icon {
-                    padding: 0.7rem !important;
-                  }
-                }
-              `}</style>
+              <div className="flex items-center gap-2 px-2">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`p-3 rounded-full transition-all duration-200 ${showFilters ? 'bg-orange-100 text-orange-600' : 'text-gray-400 hover:bg-gray-100 hover:text-orange-500'}`}
+                  title={intl.formatMessage({ id: 'home.toggleFilters' })}
+                >
+                  <FaFilter className="text-xl" />
+                </button>
+                
+                <button
+                  onClick={handleSearch}
+                  className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-full shadow-lg hover:shadow-orange-200 hover:scale-105 transition-all duration-200"
+                  aria-label={intl.formatMessage({ id: 'home.searchButton' })}
+                >
+                  <FaSearch className="text-xl" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {showFilters && <RecipeFilters onFilter={handleFilter} />}
+      {showFilters && (
+        <div className="container mx-auto px-4 -mt-8 relative z-30">
+          <RecipeFilters onFilter={handleFilter} />
+        </div>
+      )}
 
-      <RecipeList recipes={recipes} loading={loading} />
+      <main className="container mx-auto px-4 py-16">
+        <RecipeList recipes={recipes} loading={loading} />
+      </main>
     </>
   );
 };

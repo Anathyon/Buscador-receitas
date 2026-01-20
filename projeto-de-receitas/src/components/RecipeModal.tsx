@@ -1,38 +1,31 @@
 import React from 'react';
-import { FaTimes, FaYoutube, FaUtensils, FaHourglassHalf } from 'react-icons/fa';
+import { FaTimes, FaYoutube, FaUtensils, FaHourglassHalf, FaGlobeAmericas } from 'react-icons/fa';
 import { FormattedMessage } from 'react-intl';
-
-interface Meal {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-  strArea: string;
-  strCategory: string;
-  strTags: string;
-  strYoutube: string;
-  strInstructions: string;
-  [key: string]: string | null;
-}
+import type { Recipe } from '../types/recipe';
 
 interface RecipeModalProps {
-  recipe: Meal;
+  recipe: Recipe;
   onClose: () => void;
 }
 
+/**
+ * Modal de detalhes da receita.
+ * Exibe imagem, ingredientes, instruções e link para o YouTube.
+ */
 const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
+  /**
+   * Extrai ingredientes e medidas do objeto da receita.
+   */
   const getIngredients = () => {
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
-      const ingredientKey = `strIngredient${i}` as keyof Meal;
-      const measureKey = `strMeasure${i}` as keyof Meal;
+      const ingredient = recipe[`strIngredient${i}` as keyof Recipe];
+      const measure = recipe[`strMeasure${i}` as keyof Recipe];
 
-      const ingredient = recipe[ingredientKey];
-      const measure = recipe[measureKey];
-
-      if (ingredient && ingredient.trim() !== '') {
+      if (ingredient && typeof ingredient === 'string' && ingredient.trim() !== '') {
         ingredients.push({
           ingredient: ingredient,
-          measure: measure,
+          measure: measure || '',
         });
       }
     }
@@ -43,90 +36,81 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50"
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[100] p-4 animate-in fade-in duration-300"
       onClick={onClose}
-      style={{ padding: '1rem' }}
     >
       <div
-        className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative shadow-xl"
+        className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden relative shadow-2xl flex flex-col md:flex-row animate-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Botão Fechar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors duration-200"
+          className="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full transition-colors md:top-6 md:right-6"
         >
-          <FaTimes size={24} />
+          <FaTimes size={20} />
         </button>
 
-        {/* Imagem e Título */}
-        <div className="relative">
+        {/* Lado Esquerdo: Imagem e Infos contextuais */}
+        <div className="w-full md:w-2/5 h-64 md:h-auto relative">
           <img
             src={recipe.strMealThumb}
             alt={recipe.strMeal}
-            className="w-full h-64 object-cover rounded-t-xl"
+            className="w-full h-full object-cover"
           />
-          <div
-            className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent text-white"
-            style={{ padding: "1.5rem" }}
-          >
-            <h2 className="text-3xl font-bold">{recipe.strMeal}</h2>
-            <div className="flex items-center text-sm" style={{ marginTop: "0.5rem", gap: "1rem" }}>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
+            <span className="bg-orange-600/90 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full w-fit mb-3">
+              {recipe.strCategory}
+            </span>
+            <h2 className="text-3xl font-extrabold text-white mb-3 drop-shadow-md">{recipe.strMeal}</h2>
+            <div className="flex items-center text-white/90 text-sm font-medium">
+              <FaGlobeAmericas className="mr-2" />
               <span>{recipe.strArea}</span>
-              <span>•</span>
-              <span>{recipe.strCategory}</span>
-              <span>•</span>
-              <span>
-                <FormattedMessage id="modal.ingredientsCount" values={{ count: ingredients.length }} />
-              </span>
-            </div>
-            <div className="flex flex-wrap" style={{ gap: "0.5rem", marginTop: "1rem" }}>
-              {recipe.strTags?.split(',').map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-amber-100 text-amber-700 text-xs font-semibold rounded-full"
-                  style={{ paddingInline: "0.75rem", paddingBlock: "0.25rem" }}
-                >
-                  {tag.trim()}
-                </span>
-              ))}
             </div>
           </div>
         </div>
 
-        <div style={{ padding: "1.5rem" }}>
-          <a
-            href={recipe.strYoutube}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-colors duration-200"
-            style={{ paddingInline: "1.5rem", paddingBlock: "0.75rem", marginBottom: "1.5rem" }}
-          >
-            <FaYoutube style={{ marginRight: "0.5rem" }} />
-            <FormattedMessage id="modal.watchVideo" />
-          </a>
+        {/* Lado Direito: Conteúdo Scrollable */}
+        <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+          {/* Vídeo Youtube (se disponível) */}
+          {recipe.strYoutube && (
+            <a
+              href={recipe.strYoutube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold py-4 px-6 transition-all shadow-lg hover:shadow-red-200"
+            >
+              <FaYoutube size={24} className="mr-3" />
+              <FormattedMessage id="modal.watchVideo" />
+            </a>
+          )}
 
           {/* Seção de Ingredientes */}
-          <h3 className="text-2xl font-bold text-gray-800 flex items-center" style={{ marginBottom: "1rem" }}>
-            <FaUtensils className="text-orange-600" style={{ marginRight: "0.75rem" }} />
-            <FormattedMessage id="modal.ingredientsTitle" />
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ marginBottom: "2rem", rowGap: "0.5rem", columnGap: "1rem" }}>
-            {ingredients.map((item, index) => (
-              <div key={index} className="flex justify-between items-center border-b border-gray-200" style={{ paddingBlock: "0.5rem" }}>
-                <span className="font-medium text-gray-700">{item.ingredient}</span>
-                <span className="text-gray-500">{item.measure}</span>
-              </div>
-            ))}
-          </div>
+          <section>
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <FaUtensils className="text-orange-500 mr-3" />
+              <FormattedMessage id="modal.ingredientsTitle" />
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {ingredients.map((item, index) => (
+                <div key={index} className="flex justify-between items-center p-3.5 bg-gray-50 rounded-2xl border border-gray-100/50 hover:bg-orange-50/50 hover:border-orange-100 transition-colors">
+                  <span className="font-semibold text-gray-700 text-sm">{item.ingredient}</span>
+                  <span className="text-orange-600 font-bold text-xs">{item.measure}</span>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* Seção de Instruções */}
-          <h3 className="text-2xl font-bold text-gray-800 flex items-center" style={{ marginBottom: "1rem" }}>
-            <FaHourglassHalf className="text-orange-600" style={{ marginRight: "0.75rem" }} />
-            <FormattedMessage id="modal.instructionsTitle" />
-          </h3>
-          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {recipe.strInstructions}
-          </p>
+          <section>
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <FaHourglassHalf className="text-orange-500 mr-3" />
+              <FormattedMessage id="modal.instructionsTitle" />
+            </h3>
+            <div className="text-gray-600 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
+              {recipe.strInstructions}
+            </div>
+          </section>
         </div>
       </div>
     </div>
