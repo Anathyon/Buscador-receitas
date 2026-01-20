@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactCountryFlag from 'react-country-flag';
-import { FaBars, FaTimes, FaGlobeAmericas } from 'react-icons/fa';
+import { FaBars, FaTimes, FaGlobeAmericas, FaHeart } from 'react-icons/fa';
 import { FormattedMessage } from 'react-intl';
-import { useLanguage } from '../context/useLanguage';
+import { useLanguageStore } from '../store/useLanguageStore';
+import { useFavoriteStore } from '../store/useFavoriteStore';
 
 const Header: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLanguageSelectorOpen, setIsLanguageSelectorOpen] = useState(false);
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale } = useLanguageStore();
+  const { favorites } = useFavoriteStore();
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const toggleLanguageSelector = () => setIsLanguageSelectorOpen(!isLanguageSelectorOpen);
@@ -40,7 +42,19 @@ const Header: React.FC = () => {
       </Link>
 
       {/* Desktop Menu */}
-      <div className="hidden md:flex items-center gap-8">
+      <div className="hidden md:flex items-center gap-6">
+        <Link 
+          to="/favorites" 
+          className="flex items-center gap-2 text-gray-700 hover:text-orange-600 font-bold transition-all px-4 py-2.5 rounded-2xl hover:bg-orange-50 relative group"
+        >
+          <FaHeart className="text-red-500 group-hover:scale-110 transition-transform" />
+          <span><FormattedMessage id="header.favorites" /></span>
+          {favorites.length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-lg border-2 border-white animate-in zoom-in duration-300">
+              {favorites.length}
+            </span>
+          )}
+        </Link>
         <div className="relative">
           <button
             onClick={toggleLanguageSelector}
@@ -85,7 +99,23 @@ const Header: React.FC = () => {
           </button>
         </div>
         
-        <nav className="flex flex-col p-6 space-y-6">
+        <nav className="flex flex-col p-6 space-y-8">
+          <Link 
+            to="/favorites" 
+            onClick={toggleSidebar}
+            className="flex items-center justify-between bg-orange-50 p-5 rounded-3xl border border-orange-100 group"
+          >
+            <div className="flex items-center gap-4">
+              <div className="bg-white p-3 rounded-2xl shadow-sm">
+                <FaHeart className="text-red-500 text-xl" />
+              </div>
+              <span className="text-lg font-black text-gray-900 leading-none"><FormattedMessage id="header.favorites" /></span>
+            </div>
+            <span className="bg-orange-600 text-white font-bold px-3 py-1 rounded-full text-sm">
+              {favorites.length}
+            </span>
+          </Link>
+
           <div>
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4"><FormattedMessage id="header.language" /></h3>
             <div className="space-y-3">

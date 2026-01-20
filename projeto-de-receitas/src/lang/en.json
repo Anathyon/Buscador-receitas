@@ -6,6 +6,7 @@
   "header.portuguese": "Portuguese",
   "header.english": "English",
   "header.spanish": "Spanish",
+  "header.favorites": "Favorites",
   "home.title": "Delicious Recipes",
   "home.subtitle": "Discover amazing recipes from around the world",
   "home.searchPlaceholder": "Search for recipes...",
@@ -23,5 +24,9 @@
   "modal.ingredientsCount": "{count, plural, one {# ingredient} other {# ingredients}}",
   "modal.watchVideo": "Watch Video",
   "modal.ingredientsTitle": "Ingredients",
-  "modal.instructionsTitle": "Instructions"
+  "modal.instructionsTitle": "Instructions",
+  "favorites.title": "My Favorites",
+  "favorites.subtitle": "Your personal collection of flavors",
+  "favorites.empty": "You haven't favorited any recipes yet. Start exploring!",
+  "favorites.back": "Back to Home"
 }

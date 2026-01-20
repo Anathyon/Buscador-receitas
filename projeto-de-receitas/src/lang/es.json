@@ -6,6 +6,7 @@
   "header.portuguese": "Portugués",
   "header.english": "Inglés",
   "header.spanish": "Español",
+  "header.favorites": "Favoritos",
   "home.title": "Recetas Deliciosas",
   "home.subtitle": "Descubre recetas increíbles de todo el mundo",
   "home.searchPlaceholder": "Busque por recetas...",
@@ -23,5 +24,9 @@
   "modal.ingredientsCount": "{count, plural, one {# ingrediente} other {# ingredientes}}",
   "modal.watchVideo": "Ver Vídeo",
   "modal.ingredientsTitle": "Ingredientes",
-  "modal.instructionsTitle": "Instrucciones"
+  "modal.instructionsTitle": "Instrucciones",
+  "favorites.title": "Mis Favoritos",
+  "favorites.subtitle": "Tu colección personal de sabores",
+  "favorites.empty": "Aún no has guardado ninguna receta como favorita. ¡Empieza a explorar!",
+  "favorites.back": "Volver al Inicio"
 }

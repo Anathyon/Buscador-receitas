@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { useIntl, FormattedMessage } from 'react-intl';
 import RecipeModal from './RecipeModal';
-import { useLanguage } from '../context/useLanguage';
 import { translateText } from '../utils/translator';
 import type { Recipe } from '../types/recipe';
 import { recipeService } from '../services/recipeService';
+import { useLanguageStore } from '../store/useLanguageStore';
 
 interface RecipeListProps {
   recipes: Recipe[];
@@ -18,7 +18,7 @@ interface RecipeListProps {
 const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const intl = useIntl();
-  const { locale } = useLanguage();
+  const { locale } = useLanguageStore();
 
   /**
    * Filtra chaves duplicadas da API.

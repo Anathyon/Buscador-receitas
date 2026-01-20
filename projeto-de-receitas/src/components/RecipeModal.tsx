@@ -1,6 +1,6 @@
-import React from 'react';
-import { FaTimes, FaYoutube, FaUtensils, FaHourglassHalf, FaGlobeAmericas } from 'react-icons/fa';
+import { FaTimes, FaYoutube, FaUtensils, FaHourglassHalf, FaGlobeAmericas, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FormattedMessage } from 'react-intl';
+import { useFavoriteStore } from '../store/useFavoriteStore';
 import type { Recipe } from '../types/recipe';
 
 interface RecipeModalProps {
@@ -13,6 +13,17 @@ interface RecipeModalProps {
  * Exibe imagem, ingredientes, instruções e link para o YouTube.
  */
 const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
+  const { isFavorite, addFavorite, removeFavorite } = useFavoriteStore();
+  const favorited = isFavorite(recipe.idMeal);
+
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (favorited) {
+      removeFavorite(recipe.idMeal);
+    } else {
+      addFavorite(recipe);
+    }
+  };
   /**
    * Extrai ingredientes e medidas do objeto da receita.
    */
@@ -43,13 +54,25 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
         className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden relative shadow-2xl flex flex-col md:flex-row animate-in zoom-in-95 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botão Fechar */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 bg-white/10 hover:bg-white/20 text-white p-2 rounded-full transition-colors md:top-6 md:right-6"
-        >
-          <FaTimes size={20} />
-        </button>
+          <div className="absolute top-4 right-4 z-20 flex gap-2 md:top-6 md:right-6">
+            <button
+              onClick={toggleFavorite}
+              className={`p-2.5 rounded-full transition-all shadow-lg active:scale-95 ${
+                favorited 
+                  ? 'bg-red-500 text-white' 
+                  : 'bg-white/20 hover:bg-white/40 text-white backdrop-blur-md'
+              }`}
+              title={favorited ? "Remove from Favorites" : "Add to Favorites"}
+            >
+              {favorited ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+            </button>
+            <button
+              onClick={onClose}
+              className="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-full transition-all border border-white/10 backdrop-blur-md"
+            >
+              <FaTimes size={20} />
+            </button>
+          </div>
 
         {/* Lado Esquerdo: Imagem e Infos contextuais */}
         <div className="w-full md:w-2/5 h-64 md:h-auto relative">
