@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
     <>
       <section className="hero-section text-white flex items-center">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
+          <h1 className="text-3xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
             <FormattedMessage id="home.title" />
           </h1>
           <p className="text-lg md:text-2xl mb-12 max-w-2xl mx-auto opacity-90">
@@ -54,7 +54,7 @@ const HomePage: React.FC = () => {
                 id='buscar'
                 type="text"
                 placeholder={intl.formatMessage({ id: 'home.searchPlaceholder' })}
-                className="flex-1 text-gray-800 bg-transparent py-4 px-6 rounded-full focus:outline-none placeholder-gray-400 text-lg mobile-search-input"
+                className="flex-1 text-gray-800 bg-transparent py-3 px-4 md:py-4 md:px-6 rounded-full focus:outline-none placeholder-gray-400 text-base md:text-lg mobile-search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => {
@@ -62,21 +62,21 @@ const HomePage: React.FC = () => {
                 }}
               />
               
-              <div className="flex items-center gap-2 px-2">
+              <div className="flex items-center gap-1 md:gap-2 px-1 md:px-2">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`p-3 rounded-full transition-all duration-200 ${showFilters ? 'bg-orange-100 text-orange-600' : 'text-gray-400 hover:bg-gray-100 hover:text-orange-500'}`}
+                  className={`p-2 md:p-3 rounded-full transition-all duration-200 ${showFilters ? 'bg-orange-100 text-orange-600' : 'text-gray-400 hover:bg-gray-100 hover:text-orange-500'}`}
                   title={intl.formatMessage({ id: 'home.toggleFilters' })}
                 >
-                  <FaFilter className="text-xl" />
+                  <FaFilter className="text-lg md:text-xl" />
                 </button>
                 
                 <button
                   onClick={handleSearch}
-                  className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-full shadow-lg hover:shadow-orange-200 hover:scale-105 transition-all duration-200"
+                  className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:shadow-orange-200 hover:scale-105 transition-all duration-200"
                   aria-label={intl.formatMessage({ id: 'home.searchButton' })}
                 >
-                  <FaSearch className="text-xl" />
+                  <FaSearch className="text-lg md:text-xl" />
                 </button>
               </div>
             </div>

@@ -38,7 +38,7 @@ const Header: React.FC = () => {
         <div className="bg-orange-50 p-2 rounded-xl group-hover:bg-orange-100 transition-colors shadow-sm border border-orange-100">
           <img src="/icon/cook-book.png" alt="RecipeApp Logo" className="h-8 drop-shadow-sm" />
         </div>
-        <span className="text-2xl font-black text-gray-900 tracking-tighter uppercase drop-shadow-sm"><FormattedMessage id="header.appName" /></span>
+        <span className="text-xl md:text-2xl font-black text-gray-900 tracking-tighter uppercase drop-shadow-sm"><FormattedMessage id="header.appName" /></span>
       </Link>
 
       {/* Desktop Menu */}
@@ -91,7 +91,7 @@ const Header: React.FC = () => {
       </button>
 
       {/* Mobile Sidebar */}
-      <div className={`fixed top-0 left-0 w-72 h-full bg-white shadow-2xl transform transition-transform duration-500 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden z-[60]`}>
+      <div className={`fixed top-0 left-0 w-72 h-full bg-white shadow-2xl transform transition-transform duration-500 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden z-[100]`}>
         <div className="flex justify-between items-center bg-gray-50 p-6 border-b border-gray-100">
           <span className="text-2xl font-black text-orange-600 uppercase tracking-tight"><FormattedMessage id="header.appName" /></span>
           <button onClick={toggleSidebar} className="text-gray-700 bg-white p-2 rounded-lg border border-gray-200 transition-all hover:rotate-90">
@@ -99,11 +99,11 @@ const Header: React.FC = () => {
           </button>
         </div>
         
-        <nav className="flex flex-col p-6 space-y-8">
+        <nav className="flex flex-col p-6 space-y-8 bg-gray-100 h-[100vh] pb-16">
           <Link 
             to="/favorites" 
             onClick={toggleSidebar}
-            className="flex items-center justify-between bg-orange-50 p-5 rounded-3xl border border-orange-100 group"
+            className="flex items-center justify-between bg-orange-50 p-5 rounded-3xl border border-orange-500 group"
           >
             <div className="flex items-center gap-4">
               <div className="bg-white p-3 rounded-2xl shadow-sm">
@@ -123,7 +123,7 @@ const Header: React.FC = () => {
                 <button
                   key={code}
                   onClick={() => handleLanguageChange(code)}
-                  className={`flex items-center w-full text-left rounded-2xl px-5 py-4 transition-all duration-200 gap-4 border ${locale === code ? 'bg-orange-600 text-white font-bold shadow-lg border-orange-600' : 'text-gray-600 bg-gray-50 hover:bg-white border-gray-100'}`}
+                  className={`flex items-center w-full text-left rounded-2xl px-5 py-4 transition-all duration-200 gap-4 border ${locale === code ? 'bg-orange-600 text-white font-bold shadow-lg border-orange-600' : 'text-gray-600 bg-gray-50 hover:bg-white border-orange-500'}`}
                 >
                   <ReactCountryFlag countryCode={getCountryCode(code)} svg className="rounded" style={{ width: '1.8em', height: '1.8em' }} />
                   <span className="font-semibold"><FormattedMessage id={labelId} /></span>
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           </div>
         </nav>
       </div>
-      {isSidebarOpen && <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 md:hidden" onClick={toggleSidebar} />}
+      {isSidebarOpen && <div className="fixed h-[100vh] inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden" onClick={toggleSidebar} />}
     </header>
   );
 };
