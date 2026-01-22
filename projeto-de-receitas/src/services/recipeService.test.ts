@@ -1,4 +1,4 @@
-import { recipeService } from '../services/recipeService';
+import { recipeService } from './recipeService';
 
 // Mock do global fetch
 global.fetch = jest.fn();
