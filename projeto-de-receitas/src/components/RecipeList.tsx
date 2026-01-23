@@ -6,6 +6,8 @@ import { translateText } from '../utils/translator';
 import type { Recipe } from '../types/recipe';
 import { recipeService } from '../services/recipeService';
 import { useLanguageStore } from '../store/useLanguageStore';
+import { RecipeCardSkeleton } from './RecipeCardSkeleton';
+import { RecipeModalSkeleton } from './RecipeModalSkeleton';
 
 interface RecipeListProps {
   recipes: Recipe[];
@@ -17,6 +19,7 @@ interface RecipeListProps {
  */
 const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const intl = useIntl();
   const { locale } = useLanguageStore();
 
@@ -29,6 +32,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
    * Abre o modal com detalhes da receita, traduzindo se necessário.
    */
   const openModal = async (mealId: string) => {
+    setIsModalLoading(true);
     try {
       const meal = await recipeService.fetchRecipeDetail(mealId);
 
@@ -71,6 +75,8 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
       }
     } catch (error) {
       console.error(intl.formatMessage({ id: 'recipeList.fetchError' }), error);
+    } finally {
+      setIsModalLoading(false);
     }
   };
 
@@ -78,11 +84,20 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mb-4"></div>
-        <h2 className="text-xl font-medium text-gray-600">
-          <FormattedMessage id="recipeList.loading" />
-        </h2>
+      <div className="space-y-12">
+        <div className="text-center space-y-2">
+            <h2 className="text-4xl font-bold text-gray-800">
+             <FormattedMessage id="recipeList.title" />
+            </h2>
+             <p className="text-lg text-gray-500 max-w-lg mx-auto">
+            <FormattedMessage id="recipeList.subtitle" />
+            </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {[...Array(8)].map((_, index) => (
+            <RecipeCardSkeleton key={index} />
+            ))}
+        </div>
       </div>
     );
   }
@@ -151,7 +166,8 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
         ))}
       </div>
 
-      {selectedRecipe && <RecipeModal recipe={selectedRecipe} onClose={closeModal} />}
+      {isModalLoading && <RecipeModalSkeleton onClose={() => setIsModalLoading(false)} />}
+      {!isModalLoading && selectedRecipe && <RecipeModal recipe={selectedRecipe} onClose={closeModal} />}
     </div>
   );
 };
