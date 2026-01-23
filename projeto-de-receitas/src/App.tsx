@@ -24,7 +24,7 @@ const App: React.FC = () => {
     <IntlProvider locale={locale} messages={messages[locale]}>
       <div className="flex flex-col min-h-screen bg-gray-50">
         <Header />
-        <main className="flex-grow pt-15">
+        <main className="grow pt-15">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/favorites" element={<FavoritesPage />} />

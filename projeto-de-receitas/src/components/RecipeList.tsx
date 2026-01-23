@@ -126,7 +126,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
               </span>
             </div>
             
-            <div className="p-6 flex flex-col flex-grow">
+            <div className="p-6 flex flex-col grow">
               <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
                 {recipe.strMeal}
               </h3>

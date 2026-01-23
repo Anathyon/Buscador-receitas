@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
                 
                 <button
                   onClick={handleSearch}
-                  className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:shadow-orange-200 hover:scale-105 transition-all duration-200"
+                  className="bg-linear-to-r from-orange-500 to-red-600 text-white p-3 md:p-4 rounded-full shadow-lg hover:shadow-orange-200 hover:scale-105 transition-all duration-200"
                   aria-label={intl.formatMessage({ id: 'home.searchButton' })}
                 >
                   <FaSearch className="text-lg md:text-xl" />

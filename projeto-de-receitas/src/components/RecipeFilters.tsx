@@ -62,7 +62,7 @@ const RecipeFilters: React.FC<RecipeFiltersProps> = ({ onFilter }) => {
         </div>
       </div>
 
-      <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <div className="h-px bg-linear-to-r from-transparent via-gray-200 to-transparent" />
 
       {/* Ingredientes */}
       <div>

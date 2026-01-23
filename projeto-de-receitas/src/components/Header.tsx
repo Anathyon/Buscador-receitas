@@ -65,7 +65,7 @@ const Header: React.FC = () => {
           </button>
           
           {isLanguageSelectorOpen && (
-            <div className="absolute top-16 right-0 w-52 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden p-2 animate-in fade-in zoom-in-95 duration-200 z-[70]">
+            <div className="absolute top-16 right-0 w-52 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden p-2 animate-in fade-in zoom-in-95 duration-200 z-70">
               {languageOptions.map(({ code, labelId }) => (
                 <button
                   key={code}
@@ -91,7 +91,7 @@ const Header: React.FC = () => {
       </button>
 
       {/* Mobile Sidebar */}
-      <div className={`fixed top-0 left-0 w-72 h-full bg-white shadow-2xl transform transition-transform duration-500 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden z-[100]`}>
+      <div className={`fixed top-0 left-0 w-72 h-full bg-white shadow-2xl transform transition-transform duration-500 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden z-100`}>
         <div className="flex justify-between items-center bg-gray-50 p-6 border-b border-gray-100">
           <span className="text-2xl font-black text-orange-600 uppercase tracking-tight"><FormattedMessage id="header.appName" /></span>
           <button onClick={toggleSidebar} className="text-gray-700 bg-white p-2 rounded-lg border border-gray-200 transition-all hover:rotate-90">
@@ -99,7 +99,7 @@ const Header: React.FC = () => {
           </button>
         </div>
         
-        <nav className="flex flex-col p-6 space-y-8 bg-gray-100 h-[100vh] pb-16">
+        <nav className="flex flex-col p-6 space-y-8 bg-gray-100 h-screen pb-16">
           <Link 
             to="/favorites" 
             onClick={toggleSidebar}
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           </div>
         </nav>
       </div>
-      {isSidebarOpen && <div className="fixed h-[100vh] inset-0 bg-black/60 backdrop-blur-sm z-[90] md:hidden" onClick={toggleSidebar} />}
+      {isSidebarOpen && <div className="fixed h-screen inset-0 bg-black/60 backdrop-blur-sm z-90 md:hidden" onClick={toggleSidebar} />}
     </header>
   );
 };

@@ -265,7 +265,7 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-[100] p-4 animate-in fade-in duration-300"
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-100 p-4 animate-in fade-in duration-300"
       onClick={onClose}
     >
       <div
@@ -299,7 +299,7 @@ const RecipeModal: React.FC<RecipeModalProps> = ({ recipe, onClose }) => {
             alt={recipe.strMeal}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
+          <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
             <span className="bg-orange-600/90 backdrop-blur-sm text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full w-fit mb-3">
               {recipe.strCategory}
             </span>
