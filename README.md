@@ -12,10 +12,13 @@ O projeto conecta-se à API **TheMealDB** para fornecer dados de culinária aut�
 
 - ✅ **Busca Dinâmica de Receitas**: Pesquisa instantânea por nome da refeição, ingrediente ou categoria.  
 - ✅ **Tradução em Tempo Real**: Utiliza a API Gemini para traduzir dinamicamente a receita completa (ingredientes, medidas e instruções) para **Português, Inglês e Espanhol**.  
-- ✅ **Detalhes Completos da Receita**: Exibe ingredientes, medidas, instruções passo a passo, área de origem e link para vídeo no YouTube.  
+- ✅ **Detalhes Completos da Receita**: Exibe ingredientes, medidas, instruções passo a passo, área de origem e link para vídeo no YouTube.
+- ✅ **Gerenciamento de Favoritos**: Salve suas receitas preferidas para acesso rápido e fácil a qualquer momento.
+- ✅ **Exportação para PDF**: Baixe receitas completas com um layout otimizado e profissional para impressão ou compartilhamento.
+- ✅ **Experiência Visual Fluida**: Utilização de *Loading Skeletons* para um carregamento suave e agradável da interface.
 - ✅ **Filtros por Categoria e Ingrediente**: Permite refinar a busca com base em listas predefinidas da API TheMealDB.  
 - ✅ **Layout Totalmente Responsivo**: Design adaptável para funcionar perfeitamente em dispositivos móveis, tablets e desktops.  
-- ✅ **Internacionalização (i18n)**: Interface traduzida para **Português, Inglês e Espanhol**.  
+- ✅ **Internacionalização (i18n)**: Interface e conteúdo traduzidos para **Português, Inglês e Espanhol**.  
 
 ---
 
@@ -26,8 +29,10 @@ O projeto conecta-se à API **TheMealDB** para fornecer dados de culinária aut�
 | **React**          | Criação da interface com componentes reutilizáveis                         |
 | **TypeScript**     | Lógica e tipagem estática                                                  |
 | **Tailwind CSS**   | Estilização rápida e responsiva, focada na experiência do usuário (UI)      |
+| **Zustand**        | Gerenciamento de estado global leve, intuitivo e performático              |
 | **React Icons**    | Ícones modernos e acessíveis                                               |
 | **React-Intl**     | Biblioteca para Internacionalização (i18n)                                 |
+| **html2pdf.js**    | Geração de PDFs de alta qualidade diretamente do navegador                 |
 | **TheMealDB API**  | Fonte de dados confiável para receitas e filtros                           |
 | **Google Gemini API** | Serviço de tradução dinâmica para texto e informações estruturadas     |
 | **Vite**           | Build rápido e otimizado para o projeto                                    |
@@ -87,10 +92,9 @@ Se você tiver sugestões, melhorias de UI/UX, ou correções de bugs, sinta-se 
 
 ---
 
-## 👨‍💻 Autor
+## 👨💻 Autor
 
 Desenvolvido com dedicação por: **Anathyon Erysson**  
 
 📫 **E-mail:** anathyon@protonmail.com  
 🔗 **LinkedIn:** (https://www.linkedin.com/in/anathyonerysson/)
-
