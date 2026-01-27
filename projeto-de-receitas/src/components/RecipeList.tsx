@@ -37,7 +37,7 @@ const RecipeList: React.FC<RecipeListProps> = ({ recipes, loading }) => {
       const meal = await recipeService.fetchRecipeDetail(mealId);
 
       if (meal) {
-        let finalMeal = { ...meal };
+        const finalMeal = { ...meal };
 
         if (locale !== 'en') {
           // Tradução paralela de campos básicos

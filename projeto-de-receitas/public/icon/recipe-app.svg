@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Fundo com a cor do tema -->
+  <rect width="512" height="512" rx="128" fill="#ea580c"/>
+  
+  <!-- Ícone de Chapéu de Chef -->
+  <g fill="#ffffff">
+    <circle cx="256" cy="200" r="80"/>
+    <circle cx="160" cy="250" r="60"/>
+    <circle cx="352" cy="250" r="60"/>
+    <rect x="156" y="290" width="200" height="70" rx="16"/>
+    <rect x="170" y="250" width="172" height="50"/>
+  </g>
+</svg>
