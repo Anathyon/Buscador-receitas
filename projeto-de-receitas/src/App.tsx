@@ -5,6 +5,7 @@ import { IntlProvider } from 'react-intl'
 import Header from './components/Header'
 import HomePage from './components/HomePage'
 import FavoritesPage from './components/FavoritesPage'
+import PWAInstallNotification from './components/PWAInstallNotification'
 import { useLanguageStore } from './store/useLanguageStore'
 
 import ptMessages from './lang/pt.json'
@@ -24,12 +25,13 @@ const App: React.FC = () => {
     <IntlProvider locale={locale} messages={messages[locale]}>
       <div className="flex flex-col min-h-screen bg-gray-50">
         <Header />
-        <main className="grow pt-15">
+        <main className="grow pt-20">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/favorites" element={<FavoritesPage />} />
           </Routes>
         </main>
+        <PWAInstallNotification />
       </div>
     </IntlProvider>
   )

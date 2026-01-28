@@ -31,5 +31,8 @@
   "favorites.title": "Minhas Favoritas",
   "favorites.subtitle": "Sua coleção pessoal de sabores",
   "favorites.empty": "Você ainda não favoritou nenhuma receita. Comece a explorar!",
-  "favorites.back": "Voltar para Início"
+  "favorites.back": "Voltar para Início",
+  "pwa.install.title": "Instalar App",
+  "pwa.install.description": "Instale nosso app para acesso rápido e offline!",
+  "pwa.install.button": "Instalar Agora"
 }

@@ -5,7 +5,7 @@ import { recipeService } from '../services/recipeService';
 import type { Category } from '../types/recipe';
 
 interface RecipeFiltersProps {
-  onFilter: (type: 'category' | 'ingredient', value: string) => void;
+  onFilter: (type: 'category' | 'ingredient' | 'search', value: string) => void;
 }
 
 /**

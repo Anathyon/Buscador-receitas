@@ -31,5 +31,8 @@
   "favorites.title": "My Favorites",
   "favorites.subtitle": "Your personal collection of flavors",
   "favorites.empty": "You haven't favorited any recipes yet. Start exploring!",
-  "favorites.back": "Back to Home"
+  "favorites.back": "Back to Home",
+  "pwa.install.title": "Install App",
+  "pwa.install.description": "Install our app for quick and offline access!",
+  "pwa.install.button": "Install Now"
 }
